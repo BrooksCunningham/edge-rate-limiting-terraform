@@ -31,12 +31,6 @@ resource "fastly_service_vcl" "edge-rate-limiting-terraform-service" {
       override_host = var.USER_DEFAULT_OVERWRITE_HOSTNAME
     }
    
-    # snippet {
-    #   name = "Origin Response Penalty Box"
-    #   content = file("${path.module}/snippets/origin_response_penalty_box.vcl")
-    #   type = "init"
-    # }
-
     snippet {
       name = "Default Edge Rate Limiting"
       content = file("${path.module}/snippets/default_edge_rate_limiting.vcl")
@@ -49,6 +43,13 @@ resource "fastly_service_vcl" "edge-rate-limiting-terraform-service" {
       content = file("${path.module}/snippets/edge_rate_limiting_url_key.vcl")
       type = "init"
       priority = 110
+    }
+
+    snippet {
+      name = "Origin Response Penalty Box"
+      content = file("${path.module}/snippets/origin_response_penalty_box.vcl")
+      type = "init"
+      priority = 120
     }
 
     # It is necessecary to disable caching for ERL to increment the counter for origin requests
