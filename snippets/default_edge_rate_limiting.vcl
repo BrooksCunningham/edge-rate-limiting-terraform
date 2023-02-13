@@ -17,7 +17,7 @@ sub rl_green_gandolf_process {
   declare local var.rl_green_gandolf_window INTEGER;
   declare local var.rl_green_gandolf_ttl TIME;
   declare local var.rl_green_gandolf_entry STRING;
-  set var.rl_green_gandolf_limit = 10;
+  set var.rl_green_gandolf_limit = 100;
   set var.rl_green_gandolf_window = 60;
   set var.rl_green_gandolf_ttl = 2m;
   set var.rl_green_gandolf_entry = client.ip;

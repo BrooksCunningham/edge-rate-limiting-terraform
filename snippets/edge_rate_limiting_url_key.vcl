@@ -17,7 +17,7 @@ sub rl_blue_frodo_process {
   declare local var.rl_blue_frodo_window INTEGER;
   declare local var.rl_blue_frodo_ttl TIME;
   declare local var.rl_blue_frodo_entry STRING;
-  set var.rl_blue_frodo_limit = 30;
+  set var.rl_blue_frodo_limit = 10;
   set var.rl_blue_frodo_window = 60;
   set var.rl_blue_frodo_ttl = 4m;
   
