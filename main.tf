@@ -45,12 +45,29 @@ resource "fastly_service_vcl" "edge-rate-limiting-terraform-service" {
       priority = 110
     }
 
+    ##### Rate limit by org name when it is a hosting provider - Red Sauron
+    snippet {
+      name = "Rate Limit by ASN Name"
+      content = file("${path.module}/snippets/edge_rate_limiting_asname_key.vcl")
+      type = "init"
+      priority = 120
+    }
+
+    ##### origin_waf_response
     snippet {
       name = "Origin Response Penalty Box"
       content = file("${path.module}/snippets/origin_response_penalty_box.vcl")
       type = "init"
-      priority = 120
+      priority = 130
     }
+
+    snippet {
+      name = "Edge Rate Limiting with URL as key - Advanced"
+      content = file("${path.module}/snippets/edge_rate_limiting_url_key_advanced.vcl")
+      type = "init"
+      priority = 140
+    }
+
 
     # It is necessecary to disable caching for ERL to increment the counter for origin requests
     snippet {
@@ -59,4 +76,12 @@ resource "fastly_service_vcl" "edge-rate-limiting-terraform-service" {
       type = "recv"
       priority = 100
     }
+
+    # useful for sending enriched logs to the origin
+    # snippet {
+    #   name = "Add client data to requests"
+    #   content = file("${path.module}/snippets/add_client_data.vcl")
+    #   type = "recv"
+    #   priority = 110
+    # }
 }
