@@ -14,7 +14,7 @@ table rl_origin_waf_response_methods {
   "OPTIONS": "true",
 }
 
-# Start rate-limiter Fastly Edge Rate Limiting
+#### Start rate-limiter Fastly Edge Rate Limiting
 sub vcl_recv {
     # call rl_origin_waf_response_process;
       if (req.restarts == 0 && fastly.ff.visits_this_service == 0
@@ -25,9 +25,9 @@ sub vcl_recv {
         }
       }
 }
-# End rate-limiter Fastly Edge Rate Limiting
+#### End rate-limiter Fastly Edge Rate Limiting
 
-# Start check backend response status code
+#### Start check backend response status code
 sub vcl_fetch {
     # perform check based on the origin response. 206 status makes for easier testing and reporting
     if (beresp.status == 406 || beresp.status == 206) {
@@ -35,7 +35,7 @@ sub vcl_fetch {
         ratelimit.penaltybox_add(rl_origin_waf_response_pb, client.ip, 10m);
     }
 }
-# End check backend response status code
+##### End check backend response status code
 
 # Start useful troubleshooting based on the response
 sub vcl_deliver {

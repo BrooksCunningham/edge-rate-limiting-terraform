@@ -14,11 +14,8 @@ table rl_grey_aragon_methods {
 }
 
 table rl_sub_uri_paths {
-  "menu": "/foo/v1/menu/",
   "/foo/v1/menu/": "menu",
-  "subscribe": "/foo/v1/subscribe/",
   "/foo/v1/subscribe/": "subscribe",
-  "fiddle": "/fiddle/v1/",
   "/fiddle/v1/": "fiddle",
 }
 
