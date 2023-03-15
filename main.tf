@@ -18,8 +18,8 @@ resource "fastly_service_vcl" "edge-rate-limiting-terraform-service" {
   name = "edge-rate-limiting-terraform"
 
    domain {
-   name    = var.USER_DOMAIN_NAME
-   comment = "demo for configuring edge rate limiting with terraform"
+     name    = var.USER_DOMAIN_NAME
+     comment = "demo for configuring edge rate limiting with terraform"
     }
     backend {
       address = var.USER_DEFAULT_BACKEND_ADDRESS
@@ -31,27 +31,27 @@ resource "fastly_service_vcl" "edge-rate-limiting-terraform-service" {
       override_host = var.USER_DEFAULT_OVERWRITE_HOSTNAME
     }
    
-    snippet {
-      name = "Default Edge Rate Limiting"
-      content = file("${path.module}/snippets/default_edge_rate_limiting.vcl")
-      type = "init"
-      priority = 100
-    }
+    # snippet {
+    #   name = "Default Edge Rate Limiting"
+    #   content = file("${path.module}/snippets/default_edge_rate_limiting.vcl")
+    #   type = "init"
+    #   priority = 100
+    # }
 
-    snippet {
-      name = "Edge Rate Limiting with URL as key"
-      content = file("${path.module}/snippets/edge_rate_limiting_url_key.vcl")
-      type = "init"
-      priority = 110
-    }
+    # snippet {
+    #   name = "Edge Rate Limiting with URL as key"
+    #   content = file("${path.module}/snippets/edge_rate_limiting_url_key.vcl")
+    #   type = "init"
+    #   priority = 110
+    # }
 
     ##### Rate limit by org name when it is a hosting provider - Red Sauron
-    snippet {
-      name = "Rate Limit by ASN Name"
-      content = file("${path.module}/snippets/edge_rate_limiting_asname_key.vcl")
-      type = "init"
-      priority = 120
-    }
+    # snippet {
+    #   name = "Rate Limit by ASN Name"
+    #   content = file("${path.module}/snippets/edge_rate_limiting_asname_key.vcl")
+    #   type = "init"
+    #   priority = 120
+    # }
 
     ##### origin_waf_response
     snippet {
@@ -61,6 +61,7 @@ resource "fastly_service_vcl" "edge-rate-limiting-terraform-service" {
       priority = 130
     }
 
+    ##### Rate limit by URL and group specific URLs together - Advanced case
     snippet {
       name = "Edge Rate Limiting with URL as key - Advanced"
       content = file("${path.module}/snippets/edge_rate_limiting_url_key_advanced.vcl")
@@ -69,7 +70,7 @@ resource "fastly_service_vcl" "edge-rate-limiting-terraform-service" {
     }
 
 
-    # It is necessecary to disable caching for ERL to increment the counter for origin requests
+    ##### It is necessecary to disable caching for ERL to increment the counter for origin requests
     snippet {
       name = "Disable caching"
       content = file("${path.module}/snippets/disable_caching.vcl")
@@ -77,11 +78,16 @@ resource "fastly_service_vcl" "edge-rate-limiting-terraform-service" {
       priority = 100
     }
 
-    # useful for sending enriched logs to the origin
+    #### useful for sending enriched logs to the origin
     # snippet {
     #   name = "Add client data to requests"
     #   content = file("${path.module}/snippets/add_client_data.vcl")
     #   type = "recv"
     #   priority = 110
     # }
+}
+
+output "live_laugh_love_edge_rate_limiting" {
+  # How to test example
+  value = "siege https://${var.USER_DOMAIN_NAME}/foo/v1/menu?x-obj-status=206"
 }
