@@ -1,8 +1,10 @@
 # Rate Limiting with the Fastly Edge
 Enjoy the examples. Feedback is welcome.
 
-# How to deploy
+# Pre-reqs
+* Make sure Edge Rate Limiting is enabled for your Fastly Account. [https://docs.fastly.com/en/guides/about-edge-rate-limiting]
 
+# How to deploy
 * Customize the domain in variables.tf
 * `terraform apply`
 * Use your favorite tool to validate the functionality.
@@ -21,3 +23,11 @@ If there is a hard limit on the amount of traffic your backend should receive fo
 ## Put requests in the ERL Penalty Box when a specific condition is met from the origin response
 The origin can have access to different sources of intelligence and data. If a block action is take at the origin, then the block can tell the edge that future requests should be blocked based on a condition such as the client IP.
 
+# How to test
+There are a spectrum of different tools out there to test out the rate limiting functionality. [Siege](https://github.com/JoeDog/siege) is one of my favorite because of how simple it is.
+
+`siege https://YOUR_DOMAIN_HERE/some/path/123?x-obj-status=206`
+
+Other tools like [vegeta](https://github.com/tsenart/vegeta) are highly customizable and highly performant tools.
+
+`echo "GET https://YOUR_DOMAIN_HERE/some/path/123?x-obj-status=206" | vegeta attack -header "vegeta-test:ratelimittest1" -duration=60s  | vegeta report -type=text`
