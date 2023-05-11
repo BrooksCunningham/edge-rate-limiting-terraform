@@ -49,6 +49,13 @@ sub vcl_pass {
     call rl_blue_frodo_process;
 }
 
+# Only set response headers when debugging to avoid giving attackers intel
+sub vcl_deliver {
+  set resp.http.rate = ratecounter.rl_blue_frodo_rc.rate.60s;
+  set resp.http.client-ip = req.http.fastly-client-ip;
+  set resp.http.rate-counter = ratecounter.rl_blue_frodo_rc.bucket.60s;
+}
+
 sub vcl_error {
     # Snippet rate-limiter-v1-blue_frodo-error
     if (obj.status == 829 && obj.response == "Rate limiter: Too many requests for blue_frodo") {

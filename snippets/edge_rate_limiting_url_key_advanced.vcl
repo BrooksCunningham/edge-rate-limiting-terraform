@@ -99,6 +99,13 @@ sub vcl_pass {
     call rl_grey_aragon_process;
 }
 
+# Only set response headers when debugging to avoid giving attackers intel
+/* sub vcl_deliver {
+  set resp.http.rate = ratecounter.rl_grey_aragon_rc.rate.60s;
+  set resp.http.client-ip = req.http.fastly-client-ip;
+  set resp.http.rate-counter = ratecounter.rl_grey_aragon_rc.bucket.60s;
+} */
+
 sub vcl_error {
     # Snippet rate-limiter-v1-grey_aragon-error
     if (obj.status == 829 && obj.response == "Rate limiter: Too many requests for grey_aragon") {
